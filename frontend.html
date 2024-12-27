@@ -56,8 +56,12 @@
 
     <script>
         function calculate() {
-            const expression = document.getElementById('expression').value;
-            fetch('http://127.0.0.1:5000/calculate', {
+            const expression = document.getElementById('expression').value.trim();
+            if (!expression) {
+                document.getElementById('result').textContent = 'Error: Please enter a valid expression.';
+                return;
+            }
+            fetch('/calculate', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -71,8 +75,13 @@
                 } else {
                     document.getElementById('result').textContent = 'Error: ' + data.error;
                 }
+            })
+            .catch(err => {
+                document.getElementById('result').textContent = 'Error: Failed to calculate. Please try again.';
+                console.error(err);
             });
         }
+        
     </script>
 </body>
 </html>
